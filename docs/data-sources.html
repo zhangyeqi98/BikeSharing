@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Data sources | YOUR TITLE HERE</title>
-  <meta name="description" content="Chapter 2 Data sources | YOUR TITLE HERE" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <title>Chapter 2 Data sources | Analysis and Visualization of Bike Sharing Data in Washington D.C. Area</title>
+  <meta name="description" content="Chapter 2 Data sources | Analysis and Visualization of Bike Sharing Data in Washington D.C. Area" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Data sources | YOUR TITLE HERE" />
+  <meta property="og:title" content="Chapter 2 Data sources | Analysis and Visualization of Bike Sharing Data in Washington D.C. Area" />
   <meta property="og:type" content="book" />
   
   
@@ -16,15 +16,15 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Data sources | YOUR TITLE HERE" />
+  <meta name="twitter:title" content="Chapter 2 Data sources | Analysis and Visualization of Bike Sharing Data in Washington D.C. Area" />
   
   
   
 
-<meta name="author" content="YOUR NAMES HERE" />
+<meta name="author" content="Zhuoyue Hao Shihang Wang Yeqi Zhang" />
 
 
-<meta name="date" content="2020-11-09" />
+<meta name="date" content="2021-04-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,6 @@
   
 <link rel="prev" href="index.html"/>
 <link rel="next" href="data-transformation.html"/>
-<script src="libs/header-attrs-2.3/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -68,7 +67,7 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">SHORT TITLE HERE</a></li>
+<li><a href="./">Bike Sharing Data Analysis</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
@@ -89,7 +88,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">YOUR TITLE HERE</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analysis and Visualization of Bike Sharing Data in Washington D.C. Area</a>
           </h1>
         </div>
 
@@ -97,8 +96,13 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data-sources" class="section level1" number="2">
+<div id="data-sources" class="section level1">
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
+<p>Two data sources were introduced in this research, the first one was from the homepage of Capital Bikeshare, which includes the following variables (731 samples, each sample indicate a day’s record in Washington D.C. during 2019 and 2020):</p>
+<p>Duration (Duration of trip), Start Date (Includes start date and time), End Date (Includes end date and time), Bike Number (Includes ID number of bike used for the trip), Member Type (Indicates whether user was a “registered” member or a “casual” rider), Season (Season type obtained from Start Date and End Date), Day Type (Weekday or Weekend Day obtained from Start Date and End Date).</p>
+<p>This data has been processed by Capital Bikeshare to remove trips that were taken by staff as they serviced and inspected the system, trips that were taken to/from any of our “test” stations at our warehouses and any trips lasting less than 60 seconds (potentially false starts or users trying to redock a bike to ensure it was secure).</p>
+<p>The other data source was from freemeteo.com, which provides detailed weather forecasts, real time weather observations, historical data for all regions of our planet. Here we collect weather records of Washington D.C in 2019 and 2020 to incorporate with the data collected from Capital Bikeshare. In accordance with our research objective, we include the following variables (731 samples, each sample indicate a day):</p>
+<p>date, min_temp (daily minimum temperature), max_temp (daily maximum temperature), max_steady_wind (maximum steady wind of the day), total_daily_precipitation (total daily precipitation), description (description of weather types, such as “rain”, “snowfall”, “thunderstorm”etc.).</p>
 
 </div>
             </section>
@@ -138,7 +142,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/edit/main/02-data.Rmd",
+"link": "https://github.com/ZhuoyueHao/BikeSharing/edit/main/02-data.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -146,7 +150,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/blob/main/02-data.Rmd",
+"link": "https://github.com/ZhuoyueHao/BikeSharing/blob/main/02-data.Rmd",
 "text": null
 },
 "download": null,
