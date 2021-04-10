@@ -1,0 +1,110 @@
+---
+title: "data transformatin"
+author: "Yeqi Zhang"
+date: "4/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE,
+                      message = FALSE)
+chooseCRANmirror(graphics=FALSE, ind=1)
+knitr::opts_chunk$set(echo = TRUE)
+```
+# III.Data Transformation 
+
+## 3.1 Data Acquisitiion 
+
+- Download the weather website by httr and GET function;
+- Extract the table data from the website by html_table function from rvest package.
+```{r}
+library(httr)
+library(rvest)
+from.url<-'https://i-weather.com/weather/washington/history/monthly-history/?gid=4140963&station=19064&month=TODOMONTH&year=TODOYEAR&language=english&country=us-united-states'
+todo<-expand.grid(2019:2020,1:12)
+names(todo)<-c('year','month')
+todo<-todo[order(todo$year,todo$month),]
+
+
+apply(todo,1,function(xxx)
+{
+cat(paste(xxx,collapse=","),"====\n")
+   gsub('TODOYEAR',xxx[1],from.url)->inter.url
+   gsub('TODOMONTH',xxx[2],inter.url)->inter.url
+   
+   while(1)
+   {
+   GET(inter.url)->inter.web
+   if(length(grep('</html>',content(inter.web,'text')))) break;
+   }
+   
+   read_html(inter.web)->inter.webcontent
+   html_table(inter.webcontent)->inter.tables
+   sapply(inter.tables,function(ttt) "Daily minimum temperature" %in% names(ttt))->table.wanted
+   
+   inter.tables[[which(table.wanted)]]->table.wanted
+   
+   return(table.wanted)
+})->resu
+
+unique(lapply(resu,names))
+
+do.call('rbind',resu)->dat
+
+
+#library(xls)
+#write.xlsx(dat,file='data.xlsx',row.names=F)
+
+
+```
+We download a complete weather dataset with 10 variables of 24 months from year 2019 to 2020, rbind and save them as a data.frame; the data can be exported as an xlsx file or saved as RData format. 
+
+
+
+
+
+## 3.2 Data Manipulation
+
+- Select 6 most relevent variables out of 10 for later analysis
+- Rename variables' column names concicely. For example, change Daily minimum temperature to min_temp.
+- A few days of weather data from 2019-2020 are missing, for example, there is no data for 2020-12-30; therefore, we fill in the data of those missing days and mark their values as NAs.
+- Save the data in data.table format and order by date. 
+```{r}
+library(data.table)
+library(anytime)
+
+load('dat.RData')
+setDT(dat)
+
+dat<-dat[,.(date=anydate(Date),
+            min_temp=`Daily minimum temperature`,
+            max_temp=`Daily maximum temperature`,
+            max_steady_wind=`Maximum steady wind`,
+            total_daily_precipitation=`Total daily precipitation`,
+            description=Description)]
+
+dat[order(date)]->dat
+dat[,min_temp:=as.numeric(gsub('°C','',min_temp))]
+dat[,max_temp:=as.numeric(gsub('°C','',max_temp))]
+dat[,max_steady_wind:=as.numeric(gsub(' Km/h','',max_steady_wind))]
+dat[,total_daily_precipitation:=as.numeric(gsub('mm','',total_daily_precipitation))]
+        
+
+dat[,range(date)]
+
+all.days<-seq(anydate("2019-01-01"),anydate('2020-12-31'),by='1 days')
+days.miss<-anydate(setdiff(all.days,dat[,date]))  # 5 days missing 
+
+toadd<-data.table(date=anydate(days.miss),min_temp=NA,
+                  max_temp=NA,max_steady_wind=NA,total_daily_precipitation=NA,description=NA)
+
+rbind(dat,toadd)->dat
+
+dat[order(date)]->dat
+dim(dat)
+
+dat
+
+save(dat,file='dat.dt.RData')
+
+```
