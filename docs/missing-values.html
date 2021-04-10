@@ -77,7 +77,13 @@
 <li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#heatmap-for-overall-pattern"><i class="fa fa-check"></i><b>4.1</b> Heatmap for overall pattern</a></li>
 <li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#visna-for-overall-pattern"><i class="fa fa-check"></i><b>4.2</b> Visna() for overall pattern</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#deciding-factor-analysis"><i class="fa fa-check"></i><b>5.1</b> Deciding-Factor Analysis</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#variable-dependency"><i class="fa fa-check"></i><b>5.2</b> Variable-Dependency</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#quantitative-varible-analysis"><i class="fa fa-check"></i><b>5.2.1</b> Quantitative-Varible Analysis</a></li>
+<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#qualitative-varible-analysis"><i class="fa fa-check"></i><b>5.2.2</b> qualitative-Varible Analysis</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -124,6 +130,32 @@ Varibles of our concern:
 <li>Vertically, variable ‘max_steady_wind’ has the most missing values as it ranks number-one at the bottom column-sort.</li>
 <li>Horizontally, for missing values patterns, pattern ‘max_steady_wind’ took place most frequently up to 71 times, which means there are 71 rows of data with ‘max_steady_wind’ value missing as NA. The next pattern is ‘min_temp, max_temp, max_steady_wind, total_daily_precipitation, description’ with frequency 5 times, which means 5 rows of data miss values for all variables. The complete pattern-rank goes from top to bottom as the right row-sort shows.</li>
 </ul>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre><code>##   max_steady_wind min_temp max_temp total_daily_precipitation description
+## 1               0        0        0                         0           0
+## 3               1        0        0                         0           0
+## 5               1        1        1                         1           1
+## 4               0        1        1                         0           0
+## 2               0        0        0                         1           0
+## attr(,&quot;mar&quot;)
+## attr(,&quot;mar&quot;)$rm
+##      [,1]
+## [1,]  652
+## [2,]   71
+## [3,]    5
+## [4,]    2
+## [5,]    1
+## 
+## attr(,&quot;mar&quot;)$cm
+##           [,1]        [,2]        [,3]        [,4]        [,5]
+## [1,] 0.1039672 0.009575923 0.009575923 0.008207934 0.006839945
+## 
+## attr(,&quot;orders&quot;)
+## attr(,&quot;orders&quot;)[[1]]
+## [1] 1 3 5 4 2
+## 
+## attr(,&quot;orders&quot;)[[2]]
+## [1] 3 1 2 4 5</code></pre>
 
 </div>
 </div>

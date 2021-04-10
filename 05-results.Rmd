@@ -1,1 +1,178 @@
 # Results
+
+## Deciding-Factor Analysis
+
+```{r}
+library(data.table)
+library(anytime)
+library(ggplot2)
+library(RColorBrewer)
+library(patchwork)
+
+load('dat.dt.RData')
+dat->weather
+load('bikedata.dt.RData')
+finaldata->bike
+colnames(bike)[5] <- "casual"
+
+setDT(weather)
+setDT(bike)
+
+bike1 <- bike
+#bike[,all(registered+casual==total)]
+```
+
+The overall trend graph shows that:
+
+In 2019, most bike-sharing activities took place between March to October, in other words, between Spring to early Fall, among which Spring is the peak season users tend to engage in the bike-sharing, with daily average rental amount approching to 15,000.
+
+Under the impact of the pandemic, 2020 witnesssed a sharp decline of total rental amount and the trend tends to be more oscillating. Since May, the amount of registered users decreased while casual users increased.
+
+
+## Variable-Dependency
+
+We want to explore how total rental amount of bike-sharing relates to each variable. Since variables are not the same type, we would split them into quantitative varibles and qualitative varibles and analyze seperately.
+
+### Quantitative-Varible Analysis
+
+min_temp (daily minimum temperature)
+max_temp (daily maximum temperature)
+max_steady_wind (maximum steady wind of the day)
+total_daily_precipitation (total daily precipitation)
+
+```{r}
+library(pheatmap)
+
+dat2 <- merge(bike,weather,by='date',all.x=T,all.y=T)
+
+mat<-as.matrix(dat2[,.(registered,casual,total)])
+row.names(mat)<-dat2[,as.character(date)]
+
+rowSums(is.na(mat))->pan
+
+# Filter missing values out
+dat2[pan==0]->dat2
+mat[pan==0,]->mat
+
+# Cluster based on variable "registered","casual","total"
+hclust(dist(mat))->hh
+hh$labels[hh$order]->hh
+
+dat2[match(hh,as.character(date))]->dat3
+dat3[,No:=rev(ppoints(NROW(dat3),0.5))]
+
+reshape2::melt(mat) -> dd
+names(dd) <- c('date','what','number')
+setDT(dd)
+
+dd[,date:=ordered(date,levels=rev(hh))]
+dd[,what:=ordered(what,levels=colnames(mat))]
+ph<-ggplot(dd,aes(x=what,y=date,fill=number)) +
+  geom_tile(width=0.9,colour=NA)+
+  theme_bw() %+replace% theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())+
+  labs(y='Date',x='')+
+  scale_fill_gradientn(colours=c(rev(brewer.pal(5,'YlGnBu')),brewer.pal(5,'YlOrRd')))
+
+# max_temp
+pmax<-ggplot(dat3,aes(y=No,x=max_temp,colour=total)) +
+  geom_point(size=0.74,show.legend=F) +
+  scale_y_continuous(limits=c(0,1),expand=expansion(0))+
+  scale_x_continuous(expand=expansion(0))+
+  theme_bw() %+replace% theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())+
+  labs(y='')+
+  scale_color_gradient(low='gray',high='black')
+
+# min_temp
+pmin<-ggplot(dat3,aes(y=No,x=min_temp,colour=total)) +
+  geom_point(size=0.74,show.legend=F) +
+  scale_y_continuous(limits=c(0,1),expand=expansion(0))+
+  scale_x_continuous(expand=expansion(0))+
+  theme_bw() %+replace% theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())+
+  labs(y='')+
+  scale_color_gradient(low='gray',high='black')
+
+# total_daily_precipitation
+prain<-ggplot(dat3,aes(y=No,x=total_daily_precipitation,colour=total)) +
+  geom_point(size=0.74,show.legend=F) +
+  scale_y_continuous(limits=c(0,1),expand=expansion(0))+
+  scale_x_continuous(expand=expansion(0))+
+  theme_bw() %+replace% theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())+
+  labs(y='')+
+  scale_color_gradient(low='gray',high='black')
+
+# max_steady_wind
+pwind<-ggplot(dat3,aes(y=No,x=max_steady_wind,colour=total)) +
+  geom_point(size=0.74,show.legend=F) +
+  scale_y_continuous(limits=c(0,1),expand=expansion(0))+
+  scale_x_continuous(expand=expansion(0))+
+  theme_bw() %+replace% theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())+
+  labs(y='')+
+  scale_color_gradient(low='gray',high='black')
+
+ph+pmin+pmax+prain+pwind+plot_layout(nrow = 1)
+```
+
+Heatmap on the left shows such three main clusters/groups of bike-sharing rental amount as High rental amount, Low rental amount and Medium rental amount (from bottom to top). Accordingly, the right four scatterplots present how these three rental groups relate to each quantitative variables. Note that the transparency of data points represents the magnitude of total rental amount: the more total rental amount each point holds, the darker it will be. Based on the plots, it is clearly observed that:
+
+More bike-sharing activities took place when temperature was above 20 degrees Celsius (68 degrees Fahrenheit) and less people cycled when it was cold, especially when temperature was subzero.
+People prefer to rent and ride bicycles on non-rainy days with precipitation below 10mm. Noticeable, some users did enjoy rainy-cycling with precipitation above 20mm and few users even choose the service when it rained over 70mm.
+Non-windy days with 15-30 km/h wind usually attracted more users to the bike-sharing service. Indeed, some users would choose the service when it blew at over 50 km/h.
+
+
+### qualitative-Varible Analysis
+
+Weekday (weekday of the date)
+Season
+Description (weather type of the date)
+
+```{R}
+library(ggridges)
+
+bike1<-melt(bike1,
+      id.vars=c('date','season','weekday'),
+      variable.name='what',
+      value.name='number')
+
+weather[bike1,on=.(date)]->dat1
+na.omit(dat1)->dat1
+
+dat1[,year:=year(date)]
+dat1[,month:=month(date)]
+dat1[,day:=mday(date)]
+dat1[,wday:=wday(date)]
+# Weekday
+dat1[,weekday:=ordered(weekday,unique(dat1[,.(wday,weekday)])[order(-wday),weekday])]
+pweekday <- ggplot(dat1, aes(x = number, y = weekday, fill=weekday))+
+  geom_density_ridges(show.legend=F)+
+  facet_grid(rows=vars(what))+
+  theme_bw()
+
+# Season
+dat1[,season:=ordered(season,c('Spring','Summer','Fall','Winter'))]
+pseason <- ggplot(dat1, aes(x = number, y = season, fill=season))+
+  geom_density_ridges(show.legend=F)+
+  facet_grid(rows=vars(what))+
+  theme_bw()
+
+# Description
+pdesp <- ggplot(dat1, aes(x = number, y = description,fill=description))+
+  geom_density_ridges(show.legend=F)+
+  facet_grid(rows=vars(what))+
+  theme_bw()
+
+pweekday
+
+
+pseason
+
+
+pdesp
+```
+
+Based on the ridge-plots, we could observe that:
+
+Saturday and Sunday tend to attract more users to cycle, whose distributions center on higher total rental amount (over 10,000). Noticeably, Monday through Friday almost have the same distributions, which may imply users’ daily commuting necessity.
+
+Spring and Summer are users’ favorite seasons to engage in the bike-sharing activiteis while Fall attracted certain amount of users as well. Besides, there was a great variation in Spring’s total rental amount, which implies the distinctive year-on-year decline in 2020, i.e. the Covid-pandemic year.
+
+As expected, sunny days (Weather events not reported) are users’ top choices to ride bicycles while people cycled less on rainy and snowy days (Rain, Fograin, Snowfall, Snowfallrain). Surprisingly, thunderstrom days (ThunderstormRain and FogThunderstromRain) did not undermine people’s passion for bike-sharing and this phenomenon could be attributed to residents’ adaptation to frequent thunderstroms.

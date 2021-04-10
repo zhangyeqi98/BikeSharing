@@ -86,11 +86,11 @@ Visna() is another method to explore the potential patterns of missing-value dis
 library(data.table)
 library(ggplot2)
 library(grid)
-#library(extracat)
+library(extracat)
 
 load('dat.dt.RData')
 
 vars.considered<-c('min_temp','max_temp','max_steady_wind','total_daily_precipitation','description')
 what<-dat[,..vars.considered]
-#visna(what,sort='b',return.data=T,opts=list(mar=c(0.5,0.2)))
+visna(what,sort='b',return.data=T,opts=list(mar=c(0.5,0.2)))
 ```
