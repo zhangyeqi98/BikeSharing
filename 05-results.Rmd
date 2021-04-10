@@ -173,6 +173,7 @@ Spring and Summer are users’ favorite seasons to engage in the bike-sharing ac
 
 As expected, sunny days (Weather events not reported) are users’ top choices to ride bicycles while people cycled less on rainy and snowy days (Rain, Fograin, Snowfall, Snowfallrain). Surprisingly, thunderstrom days (ThunderstormRain and FogThunderstromRain) did not undermine people’s passion for bike-sharing and this phenomenon could be attributed to residents’ adaptation to frequent thunderstroms. Also, on thunderstorm days, for those who do not drive, cycling would become alternative commuting type to consider, given the shortage of ride-hailing vehicles due to increased demand.
 
+
 ## Events/Holiday Detection
 
 ```{r}
