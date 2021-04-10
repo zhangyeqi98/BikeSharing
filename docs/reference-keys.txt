@@ -2,6 +2,8 @@ introduction
 data-sources
 data-transformation
 missing-values
+heatmap-for-overall-pattern
+visna-for-overall-pattern
 results
 interactive-component
 conclusion

@@ -1,1 +1,96 @@
 # Missing values
+
+We would like to explore some meaningful patterns based on the distribution of missing values ie.NAs from our weather dataset. 
+(Note: given a fact that our Bike datasets have no missing values, the weather dataset would be our sole data.table to analyze NAs.)
+
+Data table: dat.dt.RData
+Varibles of our concern: 
+'min_temp’, ‘max_temp’, ‘max_steady_wind’, ‘total_daily_precipitation’, ‘description’
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(anytime)
+load('dat.dt.RData')
+
+dat[,year:=year(date)]
+dat[,month:=month(date)]
+dat[,weekday:=wday(date)]
+
+vars.considered<-c('min_temp','max_temp','max_steady_wind','total_daily_precipitation','description')
+
+# Functions for heatmaps, which take in matrix
+makeheatmap1 <- function(interMAT) {
+  reshape2:::melt(interMAT)->tu
+  tu$Var2<-ordered(tu$Var2,levels=colnames(interMAT))
+  tu$Var1<-ordered(tu$Var1,levels=rev(unique(row.names(interMAT))))
+  tu$value<-ordered(tu$value,levels=c(0,1),labels=c('No','Yes'))
+  ggplot(tu,aes(x=Var2,y=Var1,fill=value)) + 
+    geom_tile(width=0.9,show.legend=T) +
+    scale_x_discrete(expand=expansion(0)) +
+    scale_y_discrete(expand=expansion(0)) +
+    labs(x='',y='',fill='isNA') +
+    theme(axis.text.y=element_blank(),axis.text.x=element_text(angle=90,vjust=0.5,hjust=1),axis.ticks.y=element_blank()) +
+    scale_fill_manual(values=c('grey','#1569C7'))
+}
+
+makeheatmap<-function(interMAT,text=F)
+{
+       reshape2:::melt(interMAT)->tu
+       tu$Var2<-ordered(tu$Var2,levels=colnames(interMAT))
+       tu$Var1<-ordered(tu$Var1,levels=rev(unique(row.names(interMAT))))
+       
+       pp<-ggplot(tu,aes(x=Var2,y=Var1,fill=value)) +
+             geom_tile(width=0.9,height=0.96,show.legend=T) +
+             scale_x_discrete(expand=expansion(0)) +
+             scale_y_discrete(expand=expansion(0)) +
+             labs(x='',y='',fill='# NAs') +
+             theme(axis.text.x=element_text(angle=90,vjust=0.5,hjust=1))+
+             scale_fill_gradient(low='#008080',high='#E41B17')
+
+    if(text) pp<-pp + geom_text(aes(label=value),size=3)
+    pp
+}
+```
+
+## Heatmap for overall pattern
+
+Firstly, we would like to present an overall missing-value distribution of continuous days from 2019-01-01 to 2020-12-31 (total 731 days) and the plot shows:
+
+- X : 6 most relevent variables    Y: missing patterns (each day from 2019-01-01 to 2020-12-31)
+- Vertically, variable 'max_steady_wind' has most missing values.
+- Horizontally, missing values concentrate at the end of the year 2019 and year 2020
+
+```{r}
+what<-dat[,..vars.considered]
+inter.rowname<-as.character(dat[,date])
+
+is.na(what)->to
+row.names(to)<-inter.rowname
+as.integer(to)->to2
+matrix(to2,nrow=nrow(to))->to2
+dimnames(to2)<-dimnames(to)
+makeheatmap1(to2)
+```
+
+
+## Visna() for overall pattern
+
+Visna() is another method to explore the potential patterns of missing-value distribution of continuous days (731 days)
+
+- X : 6 most relevent variables    Y: missing patterns (each day from 2019-01-01 to 2020-12-31)
+- Vertically, variable 'max_steady_wind' has the most missing values as it ranks number-one at the bottom column-sort. 
+- Horizontally, for missing values patterns, pattern 'max_steady_wind' took place most frequently up to 71 times, which means there are 71 rows of data with 'max_steady_wind' value missing as NA. The next pattern is 'min_temp, max_temp, max_steady_wind, total_daily_precipitation, description' with frequency 5 times, which means 5 rows of data miss values for all variables. The complete pattern-rank goes from top to bottom as the right row-sort shows. 
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(grid)
+#library(extracat)
+
+load('dat.dt.RData')
+
+vars.considered<-c('min_temp','max_temp','max_steady_wind','total_daily_precipitation','description')
+what<-dat[,..vars.considered]
+#visna(what,sort='b',return.data=T,opts=list(mar=c(0.5,0.2)))
+```

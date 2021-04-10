@@ -73,7 +73,10 @@
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
-<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a><ul>
+<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#heatmap-for-overall-pattern"><i class="fa fa-check"></i><b>4.1</b> Heatmap for overall pattern</a></li>
+<li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#visna-for-overall-pattern"><i class="fa fa-check"></i><b>4.2</b> Visna() for overall pattern</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -102,9 +105,9 @@
 <p>The weather data was collected by Yeqi Zhang via web crawler implementation, where the weather website was first downloaded by httr and GET function, and the table data was then extracted from the website by html_table function from rvest package. The detail of this process was displayed in Session3, Data Transformation.</p>
 <p>Note that the original weather data collected from freemeteo.com had 10 variables, the other variables were “maximum wind gust”, “snow depth”, “pressure”, “icon (of weather type)”. We abandon those variables for they are harder to be sensed by human beings (such as “pressure”) or less relevant to the questions we are studying, such as “maximum wind gust” and “snow depth”. The former one just indicated the weather condition of a particular moment, not the overall weather circumstance for the whole day, and the later one was just available in some particular days during the winter, while in most days of the year, there is no snow and of course, no “snow depth”. Besides, a few days of weather data from 2019 to 2020 were missing, for example, there was no data for 2020-12-30; therefore, the authors filled in the data of those missing days and marked their values as NAs.</p>
 <p>Please click the following link to check out the data transformation for the bike data:
-<a href="https://github.com/ZhuoyueHao/BikeSharing/Data-Transformation/Bike-Data.Rmd" class="uri">https://github.com/ZhuoyueHao/BikeSharing/Data-Transformation/Bike-Data.Rmd</a></p>
+<a href="https://github.com/ZhuoyueHao/BikeSharing/blob/main/Data%20Transformation/Bike%20Data.Rmd" class="uri">https://github.com/ZhuoyueHao/BikeSharing/blob/main/Data%20Transformation/Bike%20Data.Rmd</a></p>
 <p>Please click the following link to check out the data transformation for the weather data:
-<a href="https://github.com/ZhuoyueHao/BikeSharing/Data-Transformation/Weather-Data.Rmd" class="uri">https://github.com/ZhuoyueHao/BikeSharing/Data-Transformation/Weather-Data.Rmd</a></p>
+<a href="https://github.com/ZhuoyueHao/BikeSharing/blob/main/Data%20Transformation/Weather%20Data.Rmd" class="uri">https://github.com/ZhuoyueHao/BikeSharing/blob/main/Data%20Transformation/Weather%20Data.Rmd</a></p>
 
 </div>
             </section>
