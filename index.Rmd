@@ -1,9 +1,19 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "Analysis and Visualization of Bike Sharing Data in Washington D.C. Area"
+author: "Zhuoyue Hao Shihang Wang Yeqi Zhang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
 # Introduction
+
+Bike Sharing System, different from traditional rentals, can process membership, rental and return back automatic. Now, over 10 years has passed since the generation of Bike Sharing system. According to “Report on the current situation of global and Chinese bike sharing market in 2020 and its future development trend”, there are 400 million registered users globally for Bike Sharing System, and the system has become a non-neglectable component in modern cities daily life. The report also figured out that the application scenarios of bike sharing tend to transition from commuting necessity to leisure, especially in some European countries such as Italy.
+
+In 2013, Hadi Fanaee-T and Joao Gama utilize the open access data of Capital Bikeshare System, which is still one of the most long-lived Bike Sharing system in the world, to predict sensing mobility in Washington D.C and therefore detect the important events in this city. Given the current situations provided above, it would be quite interesting to track whether this research still valid under different background, such as the transition trend of usage habit and especially with the disturbance of the major events, Covid-19.
+
+To conduct a comprehensive study, we collect the weather data and Capital Bikeshare’s data in Washington D.C from 2019 to 2020, and propose 3 major questions, which write as:  
+
+1.	Service Activation Transition Rate: does the Registered customer base of the Capital BikeShare increases during our monitored period (Casual-user to Registered-user)?
+2.	Deciding-Factor Analysis: how does the factors of weather type (temperature, humidity, windspeed) and date (year, month, hour, weekday) affect the count of the bike-sharing rental?
+3.	Events/Holiday Detection: can we detect important events and holiday trends in the city by looking at the bike-rental data?
 

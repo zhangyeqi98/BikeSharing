@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Data transformation | YOUR TITLE HERE</title>
-  <meta name="description" content="Chapter 3 Data transformation | YOUR TITLE HERE" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <title>Chapter 3 Data transformation | Analysis and Visualization of Bike Sharing Data in Washington D.C. Area</title>
+  <meta name="description" content="Chapter 3 Data transformation | Analysis and Visualization of Bike Sharing Data in Washington D.C. Area" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Data transformation | YOUR TITLE HERE" />
+  <meta property="og:title" content="Chapter 3 Data transformation | Analysis and Visualization of Bike Sharing Data in Washington D.C. Area" />
   <meta property="og:type" content="book" />
   
   
@@ -16,15 +16,15 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Data transformation | YOUR TITLE HERE" />
+  <meta name="twitter:title" content="Chapter 3 Data transformation | Analysis and Visualization of Bike Sharing Data in Washington D.C. Area" />
   
   
   
 
-<meta name="author" content="YOUR NAMES HERE" />
+<meta name="author" content="Zhuoyue Hao Shihang Wang Yeqi Zhang" />
 
 
-<meta name="date" content="2020-11-09" />
+<meta name="date" content="2021-04-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,6 @@
   
 <link rel="prev" href="data-sources.html"/>
 <link rel="next" href="missing-values.html"/>
-<script src="libs/header-attrs-2.3/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -68,7 +67,7 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">SHORT TITLE HERE</a></li>
+<li><a href="./">Bike Sharing Data Analysis</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
@@ -89,7 +88,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">YOUR TITLE HERE</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analysis and Visualization of Bike Sharing Data in Washington D.C. Area</a>
           </h1>
         </div>
 
@@ -97,8 +96,11 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data-transformation" class="section level1" number="3">
+<div id="data-transformation" class="section level1">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
+<p>The Capital Bikeshare data was collected by Zhuoyue Hao via …</p>
+<p>The weather data was collected by Yeqi Zhang via web crawler implementation, where the weather website was first downloaded by httr and GET function, and the table data was then extracted from the website by html_table function from rvest package. The detail of this process was displayed in Session3, Data Transformation.</p>
+<p>Note that the original weather data collected from freemeteo.com had 10 variables, the other variables were “maximum wind gust”, “snow depth”, “pressure”, “icon (of weather type)”. We abandon those variables for they are harder to be sensed by human beings (such as “pressure”) or less relevant to the questions we are studying, such as “maximum wind gust” and “snow depth”. The former one just indicated the weather condition of a particular moment, not the overall weather circumstance for the whole day, and the later one was just available in some particular days during the winter, while in most days of the year, there is no snow and of course, no “snow depth”. Besides, a few days of weather data from 2019 to 2020 were missing, for example, there was no data for 2020-12-30; therefore, the authors filled in the data of those missing days and marked their values as NAs.</p>
 
 </div>
             </section>
@@ -138,7 +140,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/edit/main/03-cleaning.Rmd",
+"link": "https://github.com/ZhuoyueHao/BikeSharing/edit/main/03-cleaning.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -146,7 +148,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/blob/main/03-cleaning.Rmd",
+"link": "https://github.com/ZhuoyueHao/BikeSharing/blob/main/03-cleaning.Rmd",
 "text": null
 },
 "download": null,
