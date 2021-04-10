@@ -25,17 +25,14 @@ todo<-expand.grid(2019:2020,1:12)
 names(todo)<-c('year','month')
 todo<-todo[order(todo$year,todo$month),]
 
-
-apply(todo,1,function(xxx)
-{
-cat(paste(xxx,collapse=","),"====\n")
+apply (todo,1,function(xxx) {
+   cat(paste(xxx,collapse=","),"====\n")
    gsub('TODOYEAR',xxx[1],from.url)->inter.url
    gsub('TODOMONTH',xxx[2],inter.url)->inter.url
    
-   while(1)
-   {
-   GET(inter.url)->inter.web
-   if(length(grep('</html>',content(inter.web,'text')))) break;
+   while (1) {
+      GET(inter.url)->inter.web
+      if(length(grep('</html>',content(inter.web,'text')))) break;
    }
    
    read_html(inter.web)->inter.webcontent
@@ -45,22 +42,18 @@ cat(paste(xxx,collapse=","),"====\n")
    inter.tables[[which(table.wanted)]]->table.wanted
    
    return(table.wanted)
-})->resu
+}) -> resu
 
 unique(lapply(resu,names))
 
 do.call('rbind',resu)->dat
 
-
 #library(xls)
 #write.xlsx(dat,file='data.xlsx',row.names=F)
 
-
 ```
+
 We download a complete weather dataset with 10 variables of 24 months from year 2019 to 2020, rbind and save them as a data.frame; the data can be exported as an xlsx file or saved as RData format. 
-
-
-
 
 
 ## 3.2 Data Manipulation
@@ -69,6 +62,7 @@ We download a complete weather dataset with 10 variables of 24 months from year 
 - Rename variables' column names concicely. For example, change Daily minimum temperature to min_temp.
 - A few days of weather data from 2019-2020 are missing, for example, there is no data for 2020-12-30; therefore, we fill in the data of those missing days and mark their values as NAs.
 - Save the data in data.table format and order by date. 
+
 ```{r}
 library(data.table)
 library(anytime)
@@ -89,7 +83,6 @@ dat[,max_temp:=as.numeric(gsub('°C','',max_temp))]
 dat[,max_steady_wind:=as.numeric(gsub(' Km/h','',max_steady_wind))]
 dat[,total_daily_precipitation:=as.numeric(gsub('mm','',total_daily_precipitation))]
         
-
 dat[,range(date)]
 
 all.days<-seq(anydate("2019-01-01"),anydate('2020-12-31'),by='1 days')
@@ -106,5 +99,4 @@ dim(dat)
 dat
 
 save(dat,file='dat.dt.RData')
-
 ```
