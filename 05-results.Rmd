@@ -176,3 +176,8 @@ Saturday and Sunday tend to attract more users to cycle, whose distributions cen
 Spring and Summer are users’ favorite seasons to engage in the bike-sharing activiteis while Fall attracted certain amount of users as well. Besides, there was a great variation in Spring’s total rental amount, which implies the distinctive year-on-year decline in 2020, i.e. the Covid-pandemic year.
 
 As expected, sunny days (Weather events not reported) are users’ top choices to ride bicycles while people cycled less on rainy and snowy days (Rain, Fograin, Snowfall, Snowfallrain). Surprisingly, thunderstrom days (ThunderstormRain and FogThunderstromRain) did not undermine people’s passion for bike-sharing and this phenomenon could be attributed to residents’ adaptation to frequent thunderstroms.
+
+```{r}
+library(TSstudio)
+ts_plot(finaldata[,c(1,6)])
+```
