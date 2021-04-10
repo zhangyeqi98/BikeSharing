@@ -1,5 +1,8 @@
 # Results
 
+##Service Activation Transition Rate
+
+
 ## Deciding-Factor Analysis
 
 ```{r}
@@ -22,14 +25,9 @@ bike1 <- bike
 #bike[,all(registered+casual==total)]
 ```
 
-The overall trend graph shows that:
-
 In 2019, most bike-sharing activities took place between March to October, in other words, between Spring to early Fall, among which Spring is the peak season users tend to engage in the bike-sharing, with daily average rental amount approching to 15,000.
 
 Under the impact of the pandemic, 2020 witnesssed a sharp decline of total rental amount and the trend tends to be more oscillating. Since May, the amount of registered users decreased while casual users increased.
-
-
-## Variable-Dependency
 
 We want to explore how total rental amount of bike-sharing relates to each variable. Since variables are not the same type, we would split them into quantitative varibles and qualitative varibles and analyze seperately.
 
@@ -119,7 +117,7 @@ People prefer to rent and ride bicycles on non-rainy days with precipitation bel
 Non-windy days with 15-30 km/h wind usually attracted more users to the bike-sharing service. Indeed, some users would choose the service when it blew at over 50 km/h.
 
 
-### qualitative-Varible Analysis
+### Qualitative-Varible Analysis
 
 Weekday (weekday of the date)
 Season
@@ -162,9 +160,7 @@ pdesp <- ggplot(dat1, aes(x = number, y = description,fill=description))+
 
 pweekday
 
-
 pseason
-
 
 pdesp
 ```
@@ -175,4 +171,11 @@ Saturday and Sunday tend to attract more users to cycle, whose distributions cen
 
 Spring and Summer are users’ favorite seasons to engage in the bike-sharing activiteis while Fall attracted certain amount of users as well. Besides, there was a great variation in Spring’s total rental amount, which implies the distinctive year-on-year decline in 2020, i.e. the Covid-pandemic year.
 
-As expected, sunny days (Weather events not reported) are users’ top choices to ride bicycles while people cycled less on rainy and snowy days (Rain, Fograin, Snowfall, Snowfallrain). Surprisingly, thunderstrom days (ThunderstormRain and FogThunderstromRain) did not undermine people’s passion for bike-sharing and this phenomenon could be attributed to residents’ adaptation to frequent thunderstroms.
+As expected, sunny days (Weather events not reported) are users’ top choices to ride bicycles while people cycled less on rainy and snowy days (Rain, Fograin, Snowfall, Snowfallrain). Surprisingly, thunderstrom days (ThunderstormRain and FogThunderstromRain) did not undermine people’s passion for bike-sharing and this phenomenon could be attributed to residents’ adaptation to frequent thunderstroms. Also, on thunderstorm days, for those who do not drive, cycling would become alternative commuting type to consider, given the shortage of ride-hailing vehicles due to increased demand.
+
+## Events/Holiday Detection
+
+```{r}
+library(TSstudio)
+ts_plot(finaldata[,c(1,6)])
+```
