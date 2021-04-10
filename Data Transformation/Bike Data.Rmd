@@ -1,0 +1,107 @@
+---
+title: "Bike Data"
+author: "Zhuoyue Hao"
+date: "4/6/2021"
+output: pdf_document
+---
+
+```{r}
+#download data from capitalbikeshare company website for year 2019-2020
+url1 <- "https://s3.amazonaws.com/capitalbikeshare-data/"
+url2 <- "-capitalbikeshare-tripdata.zip"
+date <- as.character(c(201901:201912,202001:202003,202005:202012))
+dest1<- "~/Downloads/"
+dest2 <- "-capitalbikeshare-tripdata.zip"
+
+for (i in 1:length(date)){
+  url <- paste(url1,date[i],url2,sep = "")
+  dest <- paste(dest1,date[i],dest2,sep = "")
+  download.file(url,dest)
+}
+```
+
+```{r}
+#read in all data
+bikedata <- read.csv(unz("201901-capitalbikeshare-tripdata.zip", "201901-capitalbikeshare-tripdata.csv"))
+name <- "-capitalbikeshare-tripdata.csv"
+for (i in 2:15){
+  zipfile <- paste(date[i],dest2,sep = "")
+  csv <- paste(date[i],name,sep = "")
+  bikedata <- rbind(bikedata,read.csv(unz(zipfile, csv)))
+}
+#201907 need to add .csv in zip file manually
+
+#data format change in since 202005
+bikedata2 <-read.csv(unz("202005-capitalbikeshare-tripdata.zip", "202005-capitalbikeshare-tripdata.csv"))
+for (i in 17:length(date)){
+  zipfile <- paste(date[i],dest2,sep = "")
+  csv <- paste(date[i],name,sep = "")
+  bikedata2 <- rbind(bikedata2,read.csv(unz(zipfile, csv)))
+}
+```
+
+```{r}
+bikedata <- bikedata[,c(2,9)]
+bikedata2 <- bikedata2[,c(3,13)]
+colnames(bikedata2) <- c("Start.date","Member.type")
+data <- rbind(bikedata,bikedata2)
+colnames(data) <- c("Date","Member Type")
+```
+
+```{r}
+day1 <- c("01","02","03","04","05","06","07","08","09","10":"31")
+day2 <- c("01","02","03","04","05","06","07","08","09","10":"30")
+day1902 <- c("01","02","03","04","05","06","07","08","09","10":"28")
+day2002 <- c("01","02","03","04","05","06","07","08","09","10":"29")
+month <- c("2019-01-","2019-02-","2019-03-","2019-04-","2019-05-","2019-06-","2019-07-","2019-08-","2019-09-","2019-10-","2019-11-","2019-12-","2020-01-","2020-02-","2020-03-","2020-05-","2020-06-","2020-07-","2020-08-","2020-09-","2020-10-","2020-11-","2020-12-")
+day <- list(day1,day1902,day1,day2,day1,day2,day1,day1,day2,day1,day2,day1,day1,day2002,day1,day1,day2,day1,day1,day2,day1,day2,day1)
+
+finaldata <- matrix(0,nrow=1,ncol=3)
+for (i in 1:length(month)){
+  finalmonth <- month[i]
+  finaldays <- day[i]
+  for (j in 1:length(finaldays[[1]])){
+    dayfilter <- paste(finalmonth,finaldays[[1]][j],sep="")
+    new <- data[grep(dayfilter, data$Date),]
+    total <- nrow(new)
+    registered <- table(new$`Member Type`)[2]
+    finaldata <- rbind(finaldata,cbind(dayfilter,total,registered))
+  }
+}
+```
+
+```{r}
+finaldata <- as.data.frame(finaldata)
+finaldata <- finaldata[-1,]
+finaldata$dayfilter <- as.Date(finaldata$dayfilter, "%Y-%m-%d")
+finaldata$total <- as.numeric(finaldata$total)
+finaldata$registered <- as.numeric(finaldata$registered)
+finaldata$casual <- finaldata$total - finaldata$registered
+finaldata$weekday <- weekdays(finaldata$dayfilter)
+```
+
+```{r}
+getSeason <- function(DATES) {
+    WS <- as.Date("2019-12-15", format = "%Y-%m-%d") # Winter Solstice
+    SE <- as.Date("2019-3-15",  format = "%Y-%m-%d") # Spring Equinox
+    SS <- as.Date("2019-6-15",  format = "%Y-%m-%d") # Summer Solstice
+    FE <- as.Date("2019-9-15",  format = "%Y-%m-%d") # Fall Equinox
+
+    # Convert dates from any year to 2019 dates
+    d <- as.Date(strftime(DATES, format="2019-%m-%d"))
+    
+    ifelse (d >= WS | d < SE, "Winter",
+      ifelse (d >= SE & d < SS, "Spring",
+        ifelse (d >= SS & d < FE, "Summer", "Fall")))
+}
+
+finaldata$season <- getSeason(finaldata$dayfilter)
+```
+
+```{r}
+finaldata <- finaldata[,c(1,6,5,3,4,2)]
+colnames(finaldata) <- c("date","season","weekday","registered","causul","total")
+save(finaldata,file='bikedata.dt.RData')
+```
+
+
