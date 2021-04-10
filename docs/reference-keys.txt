@@ -6,8 +6,8 @@ heatmap-for-overall-pattern
 visna-for-overall-pattern
 results
 deciding-factor-analysis
-variable-dependency
 quantitative-varible-analysis
 qualitative-varible-analysis
+eventsholiday-detection
 interactive-component
 conclusion
