@@ -1,3 +1,4 @@
 # Interactive component
 
-<iframe src="d3plot.html" width="600" height="400"></iframe>
+<iframe src="interactive/Bikeshare.html" width="400" height="300"></iframe>
+
