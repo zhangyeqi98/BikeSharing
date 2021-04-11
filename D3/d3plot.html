@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .main{
+            text-align:center;
+        }
+        .legend{
+            margin-left:20px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div style="text-align:center;">
+            <h2>2019-2020 Capital Bikeshare Daily Usage Trend</h2>
+        </div>
+        <div class="filter-box" style="text-align:center;">
+            <select id="year-list">
+                <option value="all">all</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+            <span class="legend registered">registered</span>
+            <span class="legend casual">casual</span>
+            <span class="legend total">total</span>
+        </div>
+        <div id="chart" style="text-align:center;"></div>
+    </div>
+    <script src="d3.v5.min.js"></script>
+    <script src="data.js"></script>
+
+    <script>
+        //-------------------------- start --------------------------
+        var options = {
+            width: 960,
+            height: 600,
+            margins: {
+                left: 80,
+                right: 40,
+                top: 40,
+                bottom: 80
+            },
+            xAxis: {
+                ticks: 20,
+                name: "date",     // X_field
+                title: "Date"     // X_label
+            },
+            yAxis: {
+                name: "",     // Y_field
+                title: "Count"     // Y_label
+            }
+        };
+        //-------------------------- end --------------------------
+        var margins = options.margins;
+        var width = options.width - margins.left - margins.right;
+        var height = options.height - margins.top - margins.bottom;
+        var xAxisName = options.xAxis.name;
+        var xAxisTitle = options.xAxis.title;
+        var yAxisName = options.yAxis.name;
+        var yAxisTitle = options.yAxis.title;
+        var xTicks = options.xAxis.ticks;
+        var valueNameList = [
+            { name: "registered", show: true },
+            { name: "casual", show: true },
+            { name: "total", show: true }
+        ];
+        var datalist = [];
+        var currentYear = "all";
+
+        var svg = d3.select("#chart")
+            .append('svg')
+            .attr('width', width + margins.left + margins.right)
+            .attr('height', height + margins.top + margins.bottom)
+            .append("g")
+            .attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+
+        var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+        let scale = d3.scaleTime().range([0, width]);
+        var y = d3.scaleLinear().range([height, 0]);
+
+        // Axis
+        var xAxis = d3.axisBottom().scale(scale);
+        var yAxis = d3.axisLeft().scale(y);
+
+        // Plot Axis
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + (height) + ")")
+            .call(xAxis)
+            .append("text")
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            ;
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            ;
+        // Plot X-Axis label
+        var xaxisLeft = (width - xAxisTitle.length * 10) + 10;
+        svg.append("g")
+            .attr("class", "x-axis-title")
+            .attr("transform", "translate(" + xaxisLeft + "," + (height + 40) + ")")
+            .append("text")
+            .text(xAxisTitle)
+            ;
+
+        //  Plot Y-Axis label
+       
+        svg.append("g")
+            .attr("class", "y-axis-title")
+            .attr("transform", "translate(-50," + (yAxisTitle.length * 8 + 10) + ")")
+            .append("text")
+            .style("transform", "rotate(-90deg)")
+            .text(yAxisTitle);
+
+        d3.select(".filter-box")
+            .selectAll(".legend")
+            .data(valueNameList)
+            .join("span")
+            .text(d => d.name)
+            .style("color", d => colorScale(d.name))
+            .on("click", function (d) {
+                if (d.show) {
+                    d3.select(this).style("color", "#ccc");
+                }
+                else {
+                    d3.select(this).style("color", colorScale(d.name));
+                }
+                d.show = !d.show;
+                update();
+            });
+        d3.select("#year-list")
+            .on("change", function () {
+                currentYear = this.value;
+                update();
+            })
+        function update() {
+            var sublist = currentYear === "all"
+                ? datalist : datalist.filter(e => e.date.getFullYear() === currentYear * 1);
+            var minDate = d3.min(sublist, function (d) { return d.date; });
+            var maxDate = d3.max(sublist, function (d) { return d.date; });
+            scale.domain([minDate, maxDate]);
+            xAxis.scale(scale).tickFormat(function (d) {
+                return `${d.getFullYear()}-${d.getMonth() + 1}`;
+            });
+            svg.select(".x.axis").call(xAxis);
+
+            valueNameList.forEach(function (item) {
+                if (item.show) {
+                    // Create a line Genertor
+                    var linePath = d3.line()
+                        .x(function (d) {
+                            return scale(d.date);
+                        })
+                        .y(function (d) {
+                            return y(d[item.name]);
+                        });
+                    //Add path
+                    svg.selectAll(".line-path-" + item.name) //Select all <path> in <svg>
+                        .data([sublist]) //Link data
+                        .join("path") //Add sufficient <path> elements 
+                        .attr("class", "line-path-" + item.name)
+                        .attr("d", linePath)
+                        .attr("fill", "none")
+                        .attr("stroke-width", 1)
+                        .attr("stroke", function (d, i) {
+                            return colorScale(item.name);
+                        });
+                }
+                else {
+                    svg.selectAll(".line-path-" + item.name).remove();
+                }
+            });
+        }
+
+        function handle(data) {
+            var max = 0;
+            data.forEach(function (item) {
+                valueNameList.forEach(function (p) {
+                    item[p.name] = item[p.name] * 1;
+                    max = Math.max(max, item[p.name]);
+                });
+                item.date = new Date(item.date);
+            });
+            var minDate = d3.min(data, function (d) { return d.date; });
+            var maxDate = d3.max(data, function (d) { return d.date; });
+            scale.domain([minDate, maxDate]);
+            xAxis.scale(scale).tickFormat(function (d) {
+                return `${d.getFullYear()}-${d.getMonth() + 1}`;
+            });
+            svg.select(".x.axis").call(xAxis);
+
+            y.domain([0, max * 1.1]);
+            yAxis.scale(y);
+            svg.select(".y.axis").call(yAxis);
+            datalist = data;
+            update();
+        }
+        handle(data);
+
+        
+        //d3.csv("d3_data.csv").then(function (data) {
+        //    handle(data);
+        //});
+
+    </script>
+</body>
+</html>
