@@ -11,4 +11,3 @@ qualitative-varible-analysis
 eventsholiday-detection
 interactive-component
 conclusion
-capital-bikeshare-daily-usage-trend
