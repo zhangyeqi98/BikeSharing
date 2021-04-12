@@ -1,3 +1,25 @@
 # Interactive component
 
-<iframe src="d3plot.html" width="600" height="400"></iframe>
+
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<div id="main">
+<div style="text-align:center;">
+<h2>2019-2020 Capital Bikeshare Daily Usage Trend</h2>
+</div>
+<div id="filter-box" class="filter-box" style="text-align:center;">
+<select id="year-list">
+<option value="all">all</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+</select>
+<span class="legend registered">registered</span>
+<span class="legend casual">casual</span>
+<span class="legend total">total</span>
+</div>
+<div id="chart" style="text-align:center;"></div>
+</div>
+
+<script src="data.js"></script>   
+
+<script src="bike.js?v=2"></script>

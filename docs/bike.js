@@ -1,6 +1,6 @@
 //-------------------------- 配置信息 start --------------------------
         var options = {
-            width: 800,
+            width: 960,
             height: 600,
             margins: {
                 left: 80,
